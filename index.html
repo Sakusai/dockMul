@@ -1,0 +1,418 @@
+  <!DOCTYPE html>
+  <html lang="fr">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAGUETTE CORP — Livraison Instantanée de Trucs</title>
+  <style>
+    :root {
+      --bg: #fffdf7;
+      --text: #1a1a1a;
+      --muted: #6b6b6b;
+      --border: #e8e0cc;
+      --accent: #c8420f;
+      --accent2: #2a7d4f;
+      --card: #ffffff;
+      --tag-bg: #ffeedd;
+      --tag-text: #7a2800;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #181410;
+        --text: #f0ead8;
+        --muted: #a09070;
+        --border: #3a2e20;
+        --accent: #f06030;
+        --accent2: #4ec47a;
+        --card: #221c14;
+        --tag-bg: #3a1800;
+        --tag-text: #ffb080;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Georgia, 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .logo span { color: var(--text); }
+    nav { display: flex; gap: 1.5rem; font-size: 0.85rem; font-family: sans-serif; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--text); }
+    .cart-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-radius: 4px;
+      position: relative;
+    }
+    .cart-count {
+      background: var(--accent2);
+      color: #fff;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 6px;
+      font-family: sans-serif;
+    }
+
+    .hero {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-family: sans-serif;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      max-width: 700px;
+      margin: 0 auto 1rem;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      font-family: sans-serif;
+    }
+    .hero-cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-family: sans-serif;
+      cursor: pointer;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .hero-cta:hover { opacity: 0.88; }
+    .ticker {
+      background: var(--accent);
+      color: #fff;
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      padding: 6px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: scroll 28s linear infinite;
+    }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    .section { padding: 3rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: sans-serif;
+      margin-bottom: 0.5rem;
+    }
+    .section-title { font-size: 1.8rem; margin-bottom: 2rem; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .product-card:hover { border-color: var(--accent); }
+    .product-img {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--tag-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-body { padding: 1rem; }
+    .product-tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.65rem;
+      font-family: sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 0.4rem;
+    }
+    .product-name { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .product-desc { font-size: 0.82rem; color: var(--muted); font-family: sans-serif; margin-bottom: 0.75rem; line-height: 1.4; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+    .add-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: sans-serif;
+      font-size: 0.78rem;
+      padding: 6px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .add-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .add-btn.added { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+
+    .testimonials { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 3rem 2rem; }
+    .testi-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+    .testi-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem;
+      background: var(--bg);
+    }
+    .testi-stars { color: var(--accent); font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .testi-text { font-size: 0.88rem; font-family: sans-serif; color: var(--muted); margin-bottom: 0.75rem; line-height: 1.5; }
+    .testi-author { font-size: 0.78rem; font-family: sans-serif; font-weight: 600; }
+
+    .faq-section { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 1rem 0; cursor: pointer; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; font-family: sans-serif; display: flex; justify-content: space-between; }
+    .faq-a { font-size: 0.85rem; color: var(--muted); font-family: sans-serif; margin-top: 0.5rem; line-height: 1.6; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-chevron { transition: transform 0.2s; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent2);
+      color: #fff;
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      padding: 10px 20px;
+      border-radius: 4px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    footer {
+      background: var(--card);
+      border-top: 2px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      font-family: sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    footer strong { color: var(--text); }
+    .tech-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 0.75rem; }
+    .badge {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 600px) {
+      nav { display: none; }
+      .hero { padding: 2.5rem 1rem; }
+    }
+  </style>
+  </head>
+  <body>
+
+  <header>
+    <div class="logo">Baguette<span>Corp</span></div>
+    <nav>
+      <a href="#">Catalogue</a>
+      <a href="#">Notre histoire</a>
+      <a href="#">FAQ</a>
+      <a href="#">Contact</a>
+    </nav>
+    <button class="cart-btn" onclick="openCart()">Panier <span class="cart-count" id="cart-count">0</span></button>
+  </header>
+
+  <div class="ticker">
+    <span class="ticker-inner">
+      &nbsp;&nbsp;&nbsp;LIVRAISON GRATUITE pour toute commande de baguettes &mdash; NOUVEAU : La formule "Croissant Chaos" disponible dès maintenant &mdash; PROMO FLASH : -30% sur le Kit Grenouille Électrique &mdash; Satisfaction garantie ou on vous envoie des excuses par courrier recommandé &mdash; LIVRAISON GRATUITE pour toute commande de baguettes &mdash; NOUVEAU : La formule "Croissant Chaos" disponible dès maintenant &mdash; PROMO FLASH : -30% sur le Kit Grenouille Électrique &mdash; Satisfaction garantie ou on vous envoie des excuses par courrier recommandé &nbsp;&nbsp;&nbsp;
+    </span>
+  </div>
+
+  <div class="hero">
+    <p class="hero-eyebrow">La boutique en ligne la plus absurde de France</p>
+    <h1>Tout ce dont vous avez besoin, et plein de trucs dont vous n'avez pas besoin</h1>
+    <p>Livraison en 3 à 5 jours ouvrés, ou en 47 ans si vous habitez en zone rurale. On fait ce qu'on peut.</p>
+    <button class="hero-cta" onclick="document.querySelector('.grid').scrollIntoView({behavior:'smooth'})">Voir le catalogue</button>
+  </div>
+
+  <div class="section">
+    <p class="section-label">Nos produits</p>
+    <h2 class="section-title">Ce qu'on vend (probablement)</h2>
+    <div class="grid" id="product-grid"></div>
+  </div>
+
+  <div class="testimonials">
+    <div style="max-width:1100px;margin:0 auto 2rem;">
+      <p class="section-label">Avis clients</p>
+      <h2 class="section-title">Ils ont acheté, ils témoignent</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-text">"J'ai commandé le chapeau de baguette un jeudi. Le samedi ma femme m'avait quitté mais le chapeau est arrivé. 5 étoiles."</p>
+        <div class="testi-author">— Jean-Michel V., Limoges</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <p class="testi-text">"Le kit grenouille électrique a fonctionné parfaitement. Moins une étoile car je pensais que les grenouilles étaient incluses."</p>
+        <div class="testi-author">— Nadège P., Brest</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-text">"Service client exceptionnel. Ils m'ont répondu à 3h du matin avec un gif animé de canard. Je n'avais rien demandé."</p>
+        <div class="testi-author">— Thierry-Luc D., Mulhouse</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <p class="section-label">FAQ</p>
+    <h2 class="section-title" style="font-size:1.4rem;margin-bottom:1.5rem;">Questions fréquemment posées par des gens qui s'ennuient</h2>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Livrez-vous en dehors de la France ? <span class="faq-chevron">&#9660;</span></div>
+      <p class="faq-a">Oui, sauf en Antarctique. Nos livreurs refusent catégoriquement à cause des pingouins.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Puis-je retourner un produit si je ne l'aime pas ? <span class="faq-chevron">&#9660;</span></div>
+      <p class="faq-a">Absolument. Envoyez-le à notre adresse postale fictive et nous ferons semblant de le recevoir.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Votre site est-il sécurisé ? <span class="faq-chevron">&#9660;</span></div>
+      <p class="faq-a">Oui ! Nous utilisons PrestaShop, MySQL 8.0 et phpMyAdmin derrière un pare-feu Docker. C'est un projet d'école, donc peut-être n'entrez pas votre vrai numéro de carte.</p>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Comment contacter le service client ? <span class="faq-chevron">&#9660;</span></div>
+      <p class="faq-a">Criez très fort dans votre salon entre 14h et 14h01 les jours impairs. Quelqu'un viendra peut-être.</p>
+    </div>
+  </div>
+
+  <footer>
+    <strong>BaguetteCorp &copy; 2025</strong> — Projet universitaire de e-commerce<br>
+    Aucun vrai produit n'a été vendu lors de la création de ce site.
+    <div class="tech-badges">
+      <span class="badge">PrestaShop</span>
+      <span class="badge">MySQL 8.0</span>
+      <span class="badge">phpMyAdmin</span>
+      <span class="badge">Docker Compose</span>
+      <span class="badge">Nginx</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  const products = [
+    { emoji: "🥖", tag: "Alimentaire", name: "Baguette Numérique Pro", desc: "Une baguette en format NFT. Non comestible mais très tendance lors des dîners.", price: "12,99 €" },
+    { emoji: "🐸", tag: "Électronique", name: "Kit Grenouille Électrique", desc: "Contient tout le nécessaire, sauf les grenouilles. Lire la FAQ.", price: "47,50 €" },
+    { emoji: "🕵️", tag: "Mode", name: "Chapeau Détective Suspicieux", desc: "Pour avoir l'air intelligent dans les réunions Zoom. Garantie 3 semaines.", price: "28,00 €" },
+    { emoji: "🪣", tag: "Maison", name: "Seau à Idées Vides", desc: "Idéal pour stocker vos néants de pensée. Livré pré-vide. Capacité : infinie.", price: "9,99 €" },
+    { emoji: "🐌", tag: "Transport", name: "Escargot de Livraison Premium", desc: "Plus lent que la poste, mais plus expressif. Formation incluse.", price: "150,00 €" },
+    { emoji: "📠", tag: "Tech", name: "Fax Quantique 3000", desc: "Envoie vos fax dans le passé. Compatibilité Windows 95 uniquement.", price: "89,90 €" },
+    { emoji: "🧀", tag: "Luxe", name: "Camembert Certifié Blockchain", desc: "Chaque croûte dispose de son propre hash SHA-256. Traçabilité totale.", price: "220,00 €" },
+    { emoji: "🪄", tag: "Divertissement", name: "Baguette Magique sans Magie", desc: "Un bâton. C'est juste un bâton. Très beau bâton tout de même.", price: "4,20 €" },
+  ];
+
+  let cartCount = 0;
+
+  function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = products.map((p, i) => `
+      <div class="product-card">
+        <div class="product-img">${p.emoji}</div>
+        <div class="product-body">
+          <span class="product-tag">${p.tag}</span>
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-footer">
+            <div class="product-price">${p.price}</div>
+            <button class="add-btn" id="btn-${i}" onclick="addToCart(${i})">Ajouter</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addToCart(i) {
+    cartCount++;
+    document.getElementById('cart-count').textContent = cartCount;
+    const btn = document.getElementById('btn-' + i);
+    btn.textContent = 'Ajouté !';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = 'Ajouter'; btn.classList.remove('added'); }, 1500);
+    showToast(products[i].name + ' ajouté au panier');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  function openCart() {
+    if (cartCount === 0) {
+      showToast('Votre panier est aussi vide que nos stocks.');
+    } else {
+      showToast('Panier : ' + cartCount + ' article(s) — Paiement en construction !');
+    }
+  }
+
+  function toggleFaq(el) {
+    el.classList.toggle('open');
+  }
+
+  renderProducts();
+  </script>
+  </body>
+  </html>
